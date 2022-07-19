@@ -17,16 +17,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return['Bienvenido a mi aplicación'];
 });
+
 Route::get('/users', function(){
     return['get'];
 });
+
 Route::post('/users', function(){
     return['post'];
 });
+
 Route::put('/users', function(){
     return['update'];
 });
+
 Route::delete('/users', function(){
     return['delete'];
 });
 
+Route::get('/users/{id}', function($id){
+    return $id;
+});
