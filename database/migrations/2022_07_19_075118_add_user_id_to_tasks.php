@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('contacts', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('user_id');
+        Schema::table('tasks', function (Blueprint $table) {
+
+            $table->unsignedBigInteger('user_id')->after('status');
             $table->foreign('user_id')->references('id')->on('users')->onDelete(('cascade'));
-            $table->string('email')->unique();
-            $table->string('phone_number');
-            $table->timestamps();
-        });
+        });// onDelete hace que borre user_id en todas las tablas a las que haga referencia
     }
 
     /**
@@ -31,6 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contacts');
+        Schema::table('tasks', function (Blueprint $table) {
+
+            $table->dropForeign('tasks_user_id_foreign');
+            $table->dropColumn('user_id');
+        });
     }
 };
