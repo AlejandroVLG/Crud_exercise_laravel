@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -19,44 +20,12 @@ Route::get('/', function () {
     return ['YEEEPA'];
 });
 
-Route::get('/users', function () {
-    try {
-        $users = DB::table('users')
-            ->select('id', 'name', 'email', 'title')
-            ->get()
-            ->toArray();
+Route::get('/users', [UserController::class, 'getAllUsers']);
 
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'users retrieved successfully',
-                'data' => $users
-            ],
-            200
-        );
-    } catch (\Exception $exception) {
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'Error retrieving: '.$exception->getMessage()
-            ],
-            500
-        );
-    }
-});
+Route::post('/users', [UserController::class, 'createUser']);
 
-Route::post('/users', function () {
-    return ['post'];
-});
+Route::put('/users/{id}', [UserController::class, 'editUser']);
 
-Route::put('/users', function () {
-    return ['update'];
-});
+Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
 
-Route::delete('/users', function () {
-    return ['delete'];
-});
-
-Route::get('/users/{id}', function ($id) {
-    return $id;
-});
+Route::get('/users/{id}', [UserController::class, 'getUserById']);
