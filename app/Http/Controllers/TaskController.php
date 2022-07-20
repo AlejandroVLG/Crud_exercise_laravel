@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -52,6 +53,22 @@ class TaskController extends Controller
         try {
             Log::info("Creating Task");
 
+            $validator = Validator::make($request->all(), [
+                'title' => ['required', 'string', 'min:3', 'max:10'],
+                'user_id' => 'required | integer',  // El | es otra forma que hace 
+                'duration' => ['required', 'string'] //lo mismo que meterlo dentro de []
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => $validator->errors()
+                    ],
+                    400
+                );
+            }
+
             $title = $request->input('title');
             $userId = $request->input('user_id');
             $duration = $request->input('duration');
@@ -84,10 +101,30 @@ class TaskController extends Controller
         }
     }
 
+    /* ---------------------------EditTask--------------------------- */
 
     public function editTask(Request $request, $id)
     {
         try {
+            Log::info('Updating task');
+
+            $validator = Validator::make($request->all(), [
+                'title' => ['string',],
+                'user_id' => ['integer'],
+                'status' => ['boolean'],  // El | es otra forma que hace 
+                'duration' => ['string']  //lo mismo que meterlo dentro de []
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => $validator->errors()
+                    ],
+                    400
+                );
+            }
+
             $task = Task::find($id);
 
             if (!$task) {
@@ -103,15 +140,15 @@ class TaskController extends Controller
             $status = $request->input('status');
             $duration = $request->input('duration');
 
-            if(isset($title)){
+            if (isset($title)) {
                 $task->title = $title;
             };
 
-            if(isset($status)){
+            if (isset($status)) {
                 $task->status = $status;
             };
 
-            if(isset($duration)){
+            if (isset($duration)) {
                 $task->duration = $duration;
             };
 
@@ -137,7 +174,7 @@ class TaskController extends Controller
             );
         }
     }
-    
+
 
     public function deleteTask($id)
     {
