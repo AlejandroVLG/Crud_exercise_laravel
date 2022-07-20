@@ -57,9 +57,9 @@ class TaskController extends Controller
             Log::info("Creating Task");
 
             $validator = Validator::make($request->all(), [
-                'title' => ['required', 'string', 'min:3', 'max:10'],
-                'user_id' => 'required | integer',  // El | es otra forma que hace 
-                'duration' => ['required', 'string'] //lo mismo que meterlo dentro de []
+                'title' => ['required', 'string', /* 'min:3', 'max:10' */],
+                'user_id' => 'required | integer',  // En esta linea hago lo mismo que en la anterior pero con diferente sintaxis 
+                'duration' => ['required', 'string'] 
             ]);
 
             if ($validator->fails()) {
@@ -166,12 +166,12 @@ class TaskController extends Controller
             );
         } catch (\Exception $exception) {
 
-            Log::error("Error changing a task: " . $exception->getMessage());
+            Log::error("Error modifing the task: " . $exception->getMessage());
 
             return response()->json(
                 [
                     'success' => false,
-                    'message' => "Error changing a task"
+                    'message' => "Error modifing the task"
                 ],
                 500
             );
@@ -183,7 +183,7 @@ class TaskController extends Controller
     public function deleteTask($id)
     {
         try {
-            Log::info('Deleting a task');
+            Log::info('Deleting task');
 
             $task = Task::find($id);
 
@@ -208,12 +208,12 @@ class TaskController extends Controller
             );
         } catch (\Exception $exception) {
 
-            Log::error("Error deleting a task: " . $exception->getMessage());
+            Log::error("Error deleting the task: " . $exception->getMessage());
 
             return response()->json(
                 [
                     'success' => false,
-                    'message' => "Error deleting a task"
+                    'message' => "Error deleting the task"
                 ],
                 500
             );
@@ -233,12 +233,12 @@ class TaskController extends Controller
 
         } catch (\Exception $exception) {
 
-            Log::error("Error getting a task by id: " . $exception->getMessage());
+            Log::error("Error getting task by id: " . $exception->getMessage());
 
             return response()->json(
                 [
                     'success' => false,
-                    'message' => "Error getting a task by id"
+                    'message' => "Error getting task by id"
                 ],
                 500
             );

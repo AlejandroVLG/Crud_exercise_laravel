@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    /* ---------------------------GET USERS--------------------------- */
+
+
     public function getAllUsers()
     {
         try {
