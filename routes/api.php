@@ -33,10 +33,10 @@ Route::get('/users/{id}', [UserController::class, 'getUserById']);
 
 Route::get('/tasks', [TaskController::class, 'getAllTasks']);
 
-Route::get('/tasks', [TaskController::class, 'createTask']);
+Route::post('/tasks', [TaskController::class, 'createTask']);
 
-Route::get('/tasks/{id}', [TaskController::class, 'editTask']);
+Route::put('/tasks/{id}', [TaskController::class, 'editTask']);
 
-Route::get('/tasks/{id}', [TaskController::class, 'deleteTask']);
+Route::delete('/tasks/{id}', [TaskController::class, 'deleteTask']);
 
 Route::get('/tasks/{id}', [TaskController::class, 'getTaskById']);
