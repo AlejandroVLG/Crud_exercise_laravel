@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 class TaskController extends Controller
 {
 
+    /* ---------------------------GET TASK--------------------------- */
+
     public function getAllTasks()
     {
         try {
@@ -47,6 +49,7 @@ class TaskController extends Controller
         }
     }
 
+    /* ---------------------------CREATE TASK--------------------------- */
 
     public function createTask(Request $request)
     {
@@ -101,7 +104,7 @@ class TaskController extends Controller
         }
     }
 
-    /* ---------------------------EditTask--------------------------- */
+    /* ---------------------------EDIT TASK--------------------------- */
 
     public function editTask(Request $request, $id)
     {
@@ -163,35 +166,79 @@ class TaskController extends Controller
             );
         } catch (\Exception $exception) {
 
-            Log::error("Error changing task: " . $exception->getMessage());
+            Log::error("Error changing a task: " . $exception->getMessage());
 
             return response()->json(
                 [
                     'success' => false,
-                    'message' => "Error changing task"
+                    'message' => "Error changing a task"
                 ],
                 500
             );
         }
     }
 
+    /* ---------------------------DELETE TASK--------------------------- */
 
     public function deleteTask($id)
     {
-        return $id;
+        try {
+            Log::info('Deleting a task');
+
+            $task = Task::find($id);
+
+            if (!$task) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => "Task doesn't exists"
+                    ],
+                    404
+                );
+            }
+
+            $task->delete($id);
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => "Task " . $id . " deleted"
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+
+            Log::error("Error deleting a task: " . $exception->getMessage());
+
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => "Error deleting a task"
+                ],
+                500
+            );
+        }
     }
+
+    /* ---------------------------GET TASK BY ID--------------------------- */
 
     public function getTaskById($id)
     {
         try {
+            Log::info('get task by id');
+
             $tasks = Task::query()->findOrFail($id)->toArray();
 
             return $tasks;
+
         } catch (\Exception $exception) {
+
+            Log::error("Error getting a task by id: " . $exception->getMessage());
+
             return response()->json(
                 [
-                    'success' => true,
-                    'message' => 'Error retrieving: ' . $exception->getMessage()
+                    'success' => false,
+                    'message' => "Error getting a task by id"
                 ],
                 500
             );
