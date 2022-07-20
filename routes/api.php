@@ -21,6 +21,8 @@ Route::get('/', function () {
     return ['YEEEPA'];
 });
 
+/* ---------------------------USERS--------------------------- */
+
 Route::get('/users', [UserController::class, 'getAllUsers']);
 
 Route::post('/users', [UserController::class, 'createUser']);
@@ -30,6 +32,8 @@ Route::put('/users/{id}', [UserController::class, 'editUser']);
 Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
 
 Route::get('/users/{id}', [UserController::class, 'getUserById']);
+
+/* ---------------------------TASKS--------------------------- */
 
 Route::get('/tasks', [TaskController::class, 'getAllTasks']);
 

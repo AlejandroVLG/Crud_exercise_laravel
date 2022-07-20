@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
+
     public function getAllTasks()
     {
         try {
@@ -37,13 +38,15 @@ class TaskController extends Controller
 
             return response()->json(
                 [
-                    'success' => true,
+                    'success' => false,
                     'message' => "Error getting tasks"
                 ],
                 500
             );
         }
     }
+
+
     public function createTask(Request $request)
     {
         try {
@@ -67,14 +70,13 @@ class TaskController extends Controller
                 ],
                 200
             );
-        
         } catch (\Exception $exception) {
 
             Log::error("Error creating task: " . $exception->getMessage());
 
             return response()->json(
                 [
-                    'success' => true,
+                    'success' => false,
                     'message' => "Error creating tasks"
                 ],
                 500
@@ -82,10 +84,60 @@ class TaskController extends Controller
         }
     }
 
-    public function editTask($id)
+
+    public function editTask(Request $request, $id)
     {
-        return $id;
+        try {
+            $task = Task::find($id);
+
+            if (!$task) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => "Task doesn't exists"
+                    ],
+                    404
+                );
+            }
+            $title = $request->input('title');
+            $status = $request->input('status');
+            $duration = $request->input('duration');
+
+            if(isset($title)){
+                $task->title = $title;
+            };
+
+            if(isset($status)){
+                $task->status = $status;
+            };
+
+            if(isset($duration)){
+                $task->duration = $duration;
+            };
+
+            $task->save();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => "Task " . $id . " changed"
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+
+            Log::error("Error changing task: " . $exception->getMessage());
+
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => "Error changing task"
+                ],
+                500
+            );
+        }
     }
+    
 
     public function deleteTask($id)
     {
